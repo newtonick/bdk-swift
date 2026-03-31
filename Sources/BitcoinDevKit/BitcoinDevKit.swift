@@ -3853,13 +3853,15 @@ open class ElectrumClient: ElectrumClientProtocol, @unchecked Sendable {
     /**
      * Creates a new bdk client from a electrum_client::ElectrumApi
      * Optional: Set the proxy of the builder
+     * Optional: Set `validate_domain` to `false` to allow self-signed SSL certificates
      */
-public convenience init(url: String, socks5: String? = nil)throws  {
+public convenience init(url: String, socks5: String? = nil, validateDomain: Bool = true)throws  {
     let handle =
         try rustCallWithError(FfiConverterTypeElectrumError_lift) {
     uniffi_bdkffi_fn_constructor_electrumclient_new(
         FfiConverterString.lower(url),
-        FfiConverterOptionString.lower(socks5),$0
+        FfiConverterOptionString.lower(socks5),
+        FfiConverterBool.lower(validateDomain),$0
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -22504,7 +22506,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_bdkffi_checksum_constructor_descriptorsecretkey_new() != 48188) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_bdkffi_checksum_constructor_electrumclient_new() != 17660) {
+    if (uniffi_bdkffi_checksum_constructor_electrumclient_new() != 13486) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_bdkffi_checksum_constructor_esploraclient_new() != 3197) {
